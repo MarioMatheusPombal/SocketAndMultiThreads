@@ -1,10 +1,9 @@
-from socket import socket, AF_INET, SOCK_STREAM, SOL_SOCKET, SO_REUSEADDR
+from socket import socket, AF_INET, SOCK_STREAM
 from threading import Thread
-from json import loads
+from json import loads, dumps
 
 def create_socket(server_address):
     sock = socket(AF_INET, SOCK_STREAM)
-    sock.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
 
     sock.bind(server_address)
     sock.listen(5)
@@ -50,7 +49,7 @@ def handle_client(client_socket, client_address):
                 response = { 'success': False, 'error': str(e) }
 
             print(f'Payload enviado: {response}')
-            client_socket.sendall(str(response).encode('utf-8'))
+            client_socket.sendall(dumps(response).encode('utf-8'))
     finally:
         client_socket.close()
         print(f'Conexão com {client_address} encerrada')
