@@ -1,5 +1,5 @@
 from socket import socket, AF_INET, SOCK_STREAM
-from threading import Thread
+from multiprocessing import Process
 from json import loads, dumps
 
 def create_socket(server_address):
@@ -13,11 +13,11 @@ def handle_server(server_socket):
     client_socket, client_address = server_socket.accept()
     print(f'Conexão estabelecida com {client_address}')
 
-    client_thread = Thread(
+    client_process = Process(
         target=handle_client,
         args=(client_socket, client_address)
     )
-    client_thread.start()
+    client_process.start()
 
 def handle_operation(num1, num2, operation):
     if operation == '+':
@@ -58,7 +58,7 @@ def start_server():
     server_address = ('localhost', 5000)
     server_socket = create_socket(server_address)
 
-    print(f"Servidor iniciado em http://{server_address[0]}:{server_address[1]}")
+    print(f"Servidor iniciado em {server_address[0]}:{server_address[1]}")
 
     try:
         while True:
